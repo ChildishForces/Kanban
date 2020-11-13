@@ -8,7 +8,7 @@ export type Theme = {
   };
 };
 
-const colours = ["#e71d36", "#1c1f33", "#8B85C1", "#ffffff"];
+const colours = ["#e71d36", "#1c1f33", "#5f57a4", "#ffffff"];
 
 export const theme = {
   spacing: (value: number) => value * 8,

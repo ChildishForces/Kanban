@@ -2,31 +2,25 @@ import * as React from "react";
 import { createUseStyles } from "react-jss";
 import { Theme } from "../utils/theme";
 import { fade } from "../utils/colorManipulation";
-import { useMotionValue, motion, animate } from "framer-motion";
-
-export type CardProps = {
-  id: string;
-  title: string;
-  content: string;
-  onDrag?: (id: string) => void;
-};
+import { motion } from "framer-motion";
+import { CardProps } from "../utils/KanbanTypes";
 
 const useStyles = createUseStyles(
   (theme: Theme) => ({
     root: {
       background: theme.palette.secondary,
-      text: theme.palette.text,
+      color: theme.palette.text,
       marginBottom: theme.spacing(1),
+      borderRadius: theme.spacing(0.5),
       position: "relative",
-      zIndex: ({ isDragging }: { isDragging: boolean }) =>
-        isDragging ? 10 : 0,
+      zIndex: 10,
     },
     titleSegment: {
       padding: theme.spacing(2),
       borderBottom: {
         width: 1,
         style: "solid",
-        color: fade(theme.palette.background, 0.25),
+        color: fade(theme.palette.background, 0.125),
       },
     },
     contentSegment: {
@@ -36,37 +30,37 @@ const useStyles = createUseStyles(
   { name: "Card" }
 );
 
-function Card({ id, title, content, onDrag }: CardProps) {
+function Card({ id, title, content, onDrag }: CardProps): React.ReactElement {
   const [isDragging, setIsDragging] = React.useState<boolean>(false);
-  const classes = useStyles({ isDragging });
-  // const startPosition = React.useRef<{ x: number; y: number } | undefined>();
-  // const x = useMotionValue<number>(0);
-  // const y = useMotionValue<number>(0);
+  const [isTransitioning, setIsTransitioning] = React.useState<boolean>(false);
+  const classes = useStyles({ isTransitioning });
 
   const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
-    // const { clientX, clientY } = event;
-    // startPosition.current = { x: clientX, y: clientY };
+    console.log(event);
     setIsDragging(true);
     if (onDrag) onDrag(id);
   };
   const handleDrag = (event: React.DragEvent<HTMLDivElement>) => {
-    // console.log(event);
-    // const { clientX, clientY } = event;
-    // if (!startPosition.current || !clientX || !clientY) return;
-    // x.set(x.get() + (event.clientX - (startPosition?.current?.x ?? 0)));
-    // y.set(y.get() + (event.clientY - (startPosition?.current?.y ?? 0)));
-    // startPosition.current = { x: clientX, y: clientY };
+    console.log(event);
   };
   const handleDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
-    // startPosition.current = undefined;
+    console.log(event);
     setIsDragging(false);
+    setIsTransitioning(true);
+  };
+  const handleTransitionEnd = () => {
+    setIsTransitioning(false);
   };
 
   return (
-    <motion.div className={classes.root}>
+    <motion.div
+      className={classes.root}
+      layout
+      layoutId={`card-${id}`}
+      onLayoutAnimationComplete={handleTransitionEnd}
+    >
       <div
         draggable
-        // onDragEnter={(e) => e.preventDefault()}
         onDragStart={handleDragStart}
         onDrag={handleDrag}
         onDragEnd={handleDragEnd}
