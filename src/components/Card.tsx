@@ -20,7 +20,7 @@ const useStyles = createUseStyles(
       borderBottom: {
         width: 1,
         style: "solid",
-        color: fade(theme.palette.background, 0.125),
+        color: fade(theme.palette.background, 0.25),
       },
     },
     contentSegment: {
@@ -55,9 +55,9 @@ function Card({ id, title, content, onDrag }: CardProps): React.ReactElement {
   return (
     <motion.div
       className={classes.root}
-      layout
-      layoutId={`card-${id}`}
-      onLayoutAnimationComplete={handleTransitionEnd}
+      // layout
+      // layoutId={`card-${id}`}
+      // onLayoutAnimationComplete={handleTransitionEnd}
     >
       <div
         draggable
